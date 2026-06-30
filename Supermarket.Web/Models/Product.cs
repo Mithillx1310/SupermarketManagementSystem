@@ -8,25 +8,27 @@ namespace Supermarket.Web.Models
         public int ProductId { get; set; }
 
         [Required]
-        public string Title { get; set; } = string.Empty;
+        public string Title { get; set; } = "";
 
         [Required]
-        public string Barcode { get; set; } = string.Empty;
+        public string Barcode { get; set; } = "";
 
         [Required]
-        public string BrandSupplier { get; set; } = string.Empty;
+        public string BrandSupplier { get; set; } = "";
 
+        [Required]
         public DateTime ExpiryDate { get; set; }
 
         [Required]
-        public string ProductCategory { get; set; } = string.Empty;
+        public string ProductCategory { get; set; } = "";
 
-        public string StockAvailabilityStatus { get; set; } = "In Stock";
-
-        [Range(0.01, 9999)]
+        [Required]
         public decimal Price { get; set; }
 
-        [Range(0, 10000)]
+        [Required]
         public int QuantityInStock { get; set; }
+
+        [Required]
+        public string StockAvailabilityStatus { get; set; } = "";
     }
 }

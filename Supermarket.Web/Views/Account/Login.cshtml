@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center mt-5">
+
+    <div class="col-md-4">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-primary text-white text-center">
+                <h3>Supermarket Login</h3>
+            </div>
+
+            <div class="card-body">
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.Error
+                    </div>
+                }
+
+                <form asp-action="Login" method="post">
+
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+
+                        <input type="text"
+                               name="username"
+                               class="form-control"
+                               required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+
+                        <input type="password"
+                               name="password"
+                               class="form-control"
+                               required />
+                    </div>
+
+                    <div class="d-grid">
+                        <button class="btn btn-primary">
+                            Login
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="card-footer text-center text-muted">
+                Username: <strong>admin</strong><br />
+                Password: <strong>admin123</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
