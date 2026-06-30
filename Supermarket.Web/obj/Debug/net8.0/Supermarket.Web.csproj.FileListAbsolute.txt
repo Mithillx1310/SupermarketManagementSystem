@@ -164,3 +164,4 @@
 /Users/mithill_gajera/Desktop/SupermarketManagementSystem/Supermarket.Web/obj/Debug/net8.0/Supermarket.Web.pdb
 /Users/mithill_gajera/Desktop/SupermarketManagementSystem/Supermarket.Web/obj/Debug/net8.0/Supermarket.Web.genruntimeconfig.cache
 /Users/mithill_gajera/Desktop/SupermarketManagementSystem/Supermarket.Web/obj/Debug/net8.0/ref/Supermarket.Web.dll
+/Users/mithill_gajera/Desktop/SupermarketManagementSystem/Supermarket.Web/obj/Debug/net8.0/Supermarket.Web.sourcelink.json
