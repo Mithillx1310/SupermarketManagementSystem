@@ -69,7 +69,7 @@ namespace Supermarket.Web.Controllers
             }
 
             var lowStockProducts = await _context.Products
-                .Where(p => p.QuantityInStock < 10)
+                .Where(p => p.QuantityInStock <= 10)
                 .OrderBy(p => p.QuantityInStock)
                 .ToListAsync();
 

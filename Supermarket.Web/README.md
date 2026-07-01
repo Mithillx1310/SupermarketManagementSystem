@@ -1,7 +1,7 @@
-# Miracle Software
+# Online Store Management
 
 ## Project Overview
-Miracle Software is a web-based supermarket management system developed using ASP.NET Core MVC and Entity Framework Core. The system allows users to manage products, suppliers and customer orders through a simple interface.
+Online Store Management is a web-based supermarket management system developed using ASP.NET Core MVC and Entity Framework Core. The system allows users to manage products, suppliers and customer orders through a simple interface.
 
 ## Features
 - User login

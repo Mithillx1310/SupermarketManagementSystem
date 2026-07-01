@@ -50,11 +50,12 @@ namespace Supermarket.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             if (!IsLoggedIn())
                 return RedirectToAction("Login", "Account");
 
+            await LoadProductsDropdown();
             return View();
         }
 
@@ -64,33 +65,42 @@ namespace Supermarket.Web.Controllers
             if (!IsLoggedIn())
                 return RedirectToAction("Login", "Account");
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(p => p.Title.ToLower().Trim() == order.ProductName.ToLower().Trim());
+            await LoadProductsDropdown();
 
-            if (product == null)
+            if (string.IsNullOrWhiteSpace(order.ProductName))
             {
-                TempData["Error"] = "Product not found. Please enter the exact product name.";
-                return RedirectToAction("Create");
+                ModelState.AddModelError("ProductName", "Please select a product.");
+                return View(order);
             }
 
             if (order.Quantity <= 0)
             {
-                TempData["Error"] = "Quantity must be greater than 0.";
-                return RedirectToAction("Create");
+                ModelState.AddModelError("Quantity", "Quantity must be greater than 0.");
+                return View(order);
+            }
+
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Title == order.ProductName);
+
+            if (product == null)
+            {
+                ModelState.AddModelError("ProductName", "Product not found.");
+                return View(order);
             }
 
             if (product.QuantityInStock < order.Quantity)
             {
-                TempData["Error"] = "Not enough stock. Available stock: " + product.QuantityInStock;
-                return RedirectToAction("Create");
+                ModelState.AddModelError("Quantity", "Not enough stock. Available stock: " + product.QuantityInStock);
+                return View(order);
             }
+
+            order.TotalPrice = product.Price * order.Quantity;
 
             product.QuantityInStock -= order.Quantity;
             product.StockAvailabilityStatus = GetStockStatus(product.QuantityInStock);
 
             _context.Products.Update(product);
             _context.Orders.Add(order);
-
             await _context.SaveChangesAsync();
 
             TempData["Success"] = "Order created successfully. Product stock updated.";
@@ -112,6 +122,7 @@ namespace Supermarket.Web.Controllers
                 return RedirectToAction("Index");
             }
 
+            await LoadProductsDropdown();
             return View(order);
         }
 
@@ -120,6 +131,8 @@ namespace Supermarket.Web.Controllers
         {
             if (!IsLoggedIn())
                 return RedirectToAction("Login", "Account");
+
+            await LoadProductsDropdown();
 
             var oldOrder = await _context.Orders.AsNoTracking()
                 .FirstOrDefaultAsync(o => o.OrderId == order.OrderId);
@@ -131,7 +144,7 @@ namespace Supermarket.Web.Controllers
             }
 
             var oldProduct = await _context.Products
-                .FirstOrDefaultAsync(p => p.Title.ToLower().Trim() == oldOrder.ProductName.ToLower().Trim());
+                .FirstOrDefaultAsync(p => p.Title == oldOrder.ProductName);
 
             if (oldProduct != null)
             {
@@ -142,26 +155,33 @@ namespace Supermarket.Web.Controllers
             }
 
             var newProduct = await _context.Products
-                .FirstOrDefaultAsync(p => p.Title.ToLower().Trim() == order.ProductName.ToLower().Trim());
+                .FirstOrDefaultAsync(p => p.Title == order.ProductName);
 
             if (newProduct == null)
             {
-                TempData["Error"] = "Product not found. Please enter the exact product name.";
-                return RedirectToAction("Edit", new { id = order.OrderId });
+                ModelState.AddModelError("ProductName", "Product not found.");
+                return View(order);
+            }
+
+            if (order.Quantity <= 0)
+            {
+                ModelState.AddModelError("Quantity", "Quantity must be greater than 0.");
+                return View(order);
             }
 
             if (newProduct.QuantityInStock < order.Quantity)
             {
-                TempData["Error"] = "Not enough stock. Available stock: " + newProduct.QuantityInStock;
-                return RedirectToAction("Edit", new { id = order.OrderId });
+                ModelState.AddModelError("Quantity", "Not enough stock. Available stock: " + newProduct.QuantityInStock);
+                return View(order);
             }
+
+            order.TotalPrice = newProduct.Price * order.Quantity;
 
             newProduct.QuantityInStock -= order.Quantity;
             newProduct.StockAvailabilityStatus = GetStockStatus(newProduct.QuantityInStock);
 
             _context.Products.Update(newProduct);
             _context.Orders.Update(order);
-
             await _context.SaveChangesAsync();
 
             TempData["Success"] = "Order updated successfully. Product stock updated.";
@@ -197,7 +217,7 @@ namespace Supermarket.Web.Controllers
             if (existingOrder != null)
             {
                 var product = await _context.Products
-                    .FirstOrDefaultAsync(p => p.Title.ToLower().Trim() == existingOrder.ProductName.ToLower().Trim());
+                    .FirstOrDefaultAsync(p => p.Title == existingOrder.ProductName);
 
                 if (product != null)
                 {
@@ -213,6 +233,14 @@ namespace Supermarket.Web.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        private async Task LoadProductsDropdown()
+        {
+            ViewBag.Products = await _context.Products
+                .Where(p => p.QuantityInStock > 0)
+                .OrderBy(p => p.Title)
+                .ToListAsync();
         }
 
         private string GetStockStatus(int quantity)

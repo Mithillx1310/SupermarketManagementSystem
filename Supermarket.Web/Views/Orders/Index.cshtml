@@ -39,7 +39,7 @@
         <div class="card bg-info text-white">
             <div class="card-body text-center">
                 <h5>Average Order</h5>
-                <h2>£@ViewBag.AverageOrder</h2>
+                <h2>£@Convert.ToDecimal(ViewBag.AverageOrder).ToString("F2")</h2>
             </div>
         </div>
     </div>
