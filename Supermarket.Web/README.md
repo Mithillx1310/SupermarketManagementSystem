@@ -1,54 +1,49 @@
-# Online Store Management
+# Online Store Management System
 
-## Project Overview
-Online Store Management is a web-based supermarket management system developed using ASP.NET Core MVC and Entity Framework Core. The system allows users to manage products, suppliers and customer orders through a simple interface.
+## Overview
+The Online Store Management System is an ASP.NET Core MVC web application developed for the CST2550 coursework. It enables administrators to manage products, suppliers, customer orders, inventory, and sales reports through an easy-to-use web interface.
 
 ## Features
-- User login
-- Dashboard
-- Product management
-- Supplier management
-- Order management
-- Stock management
-- Low stock alerts
-- SQL Server database
+
+- User authentication (Login system)
+- Dashboard with business statistics
+- Product Management (Add, Edit, Delete)
+- Supplier Management (Add, Edit, Delete)
+- Order Management (Add, Edit, Delete)
+- Automatic product selection from inventory
+- Automatic total price calculation
+- Automatic stock quantity updates after orders
+- Sales Report
+- Low Stock Report
+- SQL Server database integration
 
 ## Technologies Used
+
 - ASP.NET Core MVC
 - C#
 - Entity Framework Core
 - SQL Server
+- Bootstrap 5
 - HTML
 - CSS
 - JavaScript
 
-## How to Run
-1. Open the project in Visual Studio Code or Visual Studio.
-2. Restore the NuGet packages.
-3. Update the SQL Server connection string in `appsettings.json` if needed.
-4. Run the Entity Framework migrations.
-5. Start the application using:
+## Login Details
 
-```bash
-dotnet run
+Username:
+```
+admin
 ```
 
-6. Open the browser and navigate to:
-
+Password:
 ```
-https://localhost:5001
+admin123
 ```
-
-## Project Structure
-
-- Controllers – Handles application logic
-- Models – Stores data models
-- Views – User interface
-- Migrations – Database migrations
-- wwwroot – CSS, JavaScript and images
 
 ## Author
 
 Mithill Gajera
 
-Module: CST2550
+## Course
+
+CST2550 – Coursework
